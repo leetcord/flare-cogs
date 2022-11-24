@@ -57,8 +57,6 @@ class Forward(commands.Cog):
     async def on_message_without_command(self, message):
         if message.guild is not None:
             return
-        if message.channel.recipient.id in self.bot.owner_ids:
-            return
         if not await self.bot.allowed_by_whitelist_blacklist(message.author):
             return
         if message.author.id in await self.config.blacklist():
@@ -80,14 +78,14 @@ class Forward(commands.Cog):
                 embeds = [discord.Embed(description=message.content)]
                 embeds[0].set_author(
                     name=f"{message.author} | {message.author.id}",
-                    icon_url=message.author.avatar_url,
+                    icon_url=message.author.avatar,
                 )
                 embeds = self._append_attachements(message, embeds)
                 embeds[-1].timestamp = message.created_at
         else:
             embeds = [discord.Embed(description=message.content)]
             embeds[0].set_author(
-                name=f"{message.author} | {message.author.id}", icon_url=message.author.avatar_url
+                name=f"{message.author} | {message.author.id}", icon_url=message.author.avatar
             )
             embeds = self._append_attachements(message, embeds)
             embeds[-1].timestamp = message.created_at
@@ -169,10 +167,10 @@ class Forward(commands.Cog):
         """
         em = discord.Embed(colour=discord.Colour.red(), description=message)
 
-        if ctx.bot.user.avatar_url:
+        if ctx.bot.user.avatar:
             em.set_author(
                 name=f"Message from {ctx.author} | {ctx.author.id}",
-                icon_url=ctx.bot.user.avatar_url,
+                icon_url=ctx.bot.user.avatar,
             )
         else:
             em.set_author(name=f"Message from {ctx.author} | {ctx.author.id}")
